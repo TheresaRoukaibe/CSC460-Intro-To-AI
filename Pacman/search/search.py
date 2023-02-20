@@ -93,6 +93,33 @@ def depthFirstSearch(problem: SearchProblem):
     visited = []
     frontier.push((problem.getStartState(), []))
     
+    #while frontier not empty pop the last element added (deepest) we don't care about the stepCost in this algorithm 
+    while not frontier.isEmpty():
+        currState, action = frontier.pop()
+        #if the state popped is a goal state, stop the algorithm and return the complete list of actions reached
+        if problem.isGoalState(currState):
+            actions = action
+            return actions
+        #this condition ensures a graph search version (avoids visiting already discovered nodes)
+        if currState not in visited:
+            visited.append(currState)
+            for nextState in problem.getSuccessors(currState):
+                newAction = action + [nextState[1]]
+                nextNode = (nextState[0], newAction)
+                frontier.push(nextNode)
+    return actions
+    util.raiseNotDefined()
+
+def breadthFirstSearch(problem: SearchProblem):
+    """Search the shallowest nodes in the search tree first."""
+    "*** YOUR CODE HERE ***"
+     #Initialize a queue(FIFO) as a frontier with initial state as first element (simulating discovering branches level by level)
+     #The logic behnid this is the same as DFS but the it is the data structure that changes 
+    actions = []
+    frontier = util.Queue()
+    visited = []
+    frontier.push((problem.getStartState(), []))
+
     while not frontier.isEmpty():
         currState, action = frontier.pop()
         if problem.isGoalState(currState):
@@ -104,15 +131,8 @@ def depthFirstSearch(problem: SearchProblem):
                 newAction = action + [nextState[1]]
                 nextNode = (nextState[0], newAction)
                 frontier.push(nextNode)
+    print(actions)
     return actions
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    util.raiseNotDefined()
-
-def breadthFirstSearch(problem: SearchProblem):
-    """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
 
 def uniformCostSearch(problem: SearchProblem):

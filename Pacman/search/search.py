@@ -18,6 +18,7 @@ Pacman agents (in searchAgents.py).
 """
 
 import util
+import searchAgents
 
 class SearchProblem:
     """
@@ -99,10 +100,12 @@ def depthFirstSearch(problem: SearchProblem):
         #if the state popped is a goal state, stop the algorithm and return the complete list of actions reached
         if problem.isGoalState(currState):
             actions = action
+            print(actions)
             return actions
         #this condition ensures a graph search version (avoids visiting already discovered nodes)
         if currState not in visited:
             visited.append(currState)
+            #get Successors returns a list of successor, action, cost 
             for nextState in problem.getSuccessors(currState):
                 newAction = action + [nextState[1]]
                 nextNode = (nextState[0], newAction)
@@ -131,13 +134,31 @@ def breadthFirstSearch(problem: SearchProblem):
                 newAction = action + [nextState[1]]
                 nextNode = (nextState[0], newAction)
                 frontier.push(nextNode)
-    print(actions)
     return actions
     util.raiseNotDefined()
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    actions = []
+    frontier = util.PriorityQueue()
+    visited = []
+    cost = 0;
+    frontier.push((problem.getStartState(), [], cost), cost)
+
+    while not frontier.isEmpty():
+        currState, action, cost = frontier.pop()
+        if problem.isGoalState(currState):
+            actions = action
+            return actions
+        if currState not in visited:
+            visited.append(currState)
+            for nextState, nextAction, nextCost in problem.getSuccessors(currState):
+                newCost = cost + nextCost
+                newAction = action + [nextAction]
+                nextNode = ((nextState, newAction, newCost))
+                frontier.update(nextNode, newCost)
+    return actions
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -150,6 +171,28 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    # heuristic is manhattanHeuristic already implemented 
+    actions = []
+    frontier = util.PriorityQueue()
+    visited = []
+    cost = 0;
+    heuristic = searchAgents.manhattanHeuristic(problem.getStartState(), problem)
+    frontier.push((problem.getStartState(), [], cost), heuristic)
+
+    while not frontier.isEmpty():
+        currState, action, cost = frontier.pop()
+        if problem.isGoalState(currState):
+            actions = action
+            return actions
+        if currState not in visited:
+            visited.append(currState)
+            for nextState, nextAction, nextCost in problem.getSuccessors(currState):
+                newCost = cost + nextCost 
+                newAction = action + [nextAction]
+                nextNode = ((nextState, newAction, newCost))
+                frontier.update(nextNode, searchAgents.manhattanHeuristic(nextState, problem)+newCost)
+    return actions
+
     util.raiseNotDefined()
 
 

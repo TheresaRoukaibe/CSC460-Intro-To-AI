@@ -292,6 +292,10 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        #Each index symbolizes one corner 
+        #FALSE: in the initial state all corners are not visited 
+        self.cornersReached = [False, False, False, False]
+
 
     def getStartState(self):
         """
@@ -299,6 +303,8 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
+        #The only needed state space is pacman's starting position and the corners visited  
+        return (self.startingPosition,self.cornersReached)
         util.raiseNotDefined()
 
     def isGoalState(self, state: Any):
@@ -306,6 +312,11 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
+        #A goal state is one where all corners are reached hence all indexes should have a value TRUE
+        for position in state[1]:
+            if not position:
+                return False
+        return True
         util.raiseNotDefined()
 
     def getSuccessors(self, state: Any):
@@ -329,6 +340,25 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            #figuring out if our position hits wall with reference from the code above
+
+            x,y = state[0]
+            cornerVisited = list(state[1]) #copy of the cornersReached list in the state space
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+
+            #If position is valid 
+            if not self.walls[nextx][nexty]:
+                #if position is a corner 
+                if (nextx,nexty) in self.corners:
+                    #set cornerVisited[indexOfCorner] to true 
+                    cornerVisited[self.corners.index((nextx,nexty))] = True
+
+                nextState = ((nextx, nexty),cornerVisited)
+                #adding successor with a cost of 1 
+                successors.append((nextState,action,1))
+
+
 
         self._expanded += 1 # DO NOT CHANGE
         return successors

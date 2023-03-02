@@ -176,8 +176,8 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     frontier = util.PriorityQueue()
     visited = []
     cost = 0;
-    heuristic = searchAgents.manhattanHeuristic(problem.getStartState(), problem)
-    frontier.push((problem.getStartState(), [], cost), heuristic)
+    myHeuristic = heuristic(problem.getStartState(), problem)
+    frontier.push((problem.getStartState(), [], cost), myHeuristic)
 
     while not frontier.isEmpty():
         currState, action, cost = frontier.pop()
@@ -190,7 +190,8 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
                 newCost = cost + nextCost 
                 newAction = action + [nextAction]
                 nextNode = ((nextState, newAction, newCost))
-                frontier.update(nextNode, searchAgents.manhattanHeuristic(nextState, problem)+newCost)
+                newHeuristic = newCost + heuristic(nextState, problem)
+                frontier.update(nextNode, newHeuristic)
     return actions
 
     util.raiseNotDefined()

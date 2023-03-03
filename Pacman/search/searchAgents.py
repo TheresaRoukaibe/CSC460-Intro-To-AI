@@ -395,18 +395,26 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
 
     "*** YOUR CODE HERE ***"
     myCorners = list(corners)
-    heuristic = 0
     currentPosition = state[0]
-    #solve the sub problem of finding the closest corner 
-    while myCorners:
+    cornersVisited = state[1]
+    unvisitedCorners = []
+    heuristic = 0
+    #add the false corners(not visited) to this array  from the corners coordinates
+    for index, value in enumerate(cornersVisited):
+        if not value:
+            unvisitedCorners.append(myCorners[index])
+    currentPosition = state[0]
+
+    while unvisitedCorners:
         distances = []
-        for corner in myCorners:
-           distances.append((util.manhattanDistance(currentPosition, corner), corner))
-        currDistance, currCorner = min(distances)
-        currentPosition = currCorner
-        heuristic += currDistance 
-        myCorners.remove(currCorner)
-    return heuristic 
+        for corner in unvisitedCorners:
+            distances.append((util.manhattanDistance(currentPosition, corner), corner))
+        newDistance, newCorner = min(distances)
+        heuristic += newDistance
+        currentPosition = newCorner
+        unvisitedCorners.remove(newCorner)
+
+    return heuristic
 
 
 

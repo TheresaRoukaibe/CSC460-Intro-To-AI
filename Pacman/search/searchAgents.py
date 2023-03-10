@@ -513,9 +513,31 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     position, foodGrid = state
     distances = [0]
     "*** YOUR CODE HERE ***"
-    for food in foodGrid.asList():
-        distances.append(util.manhattanDistance(position, food))
-    return max(distances)
+    #algorithm based on an aswer by Antonio Jurić on StackOverflow https://stackoverflow.com/questions/9994913/pacman-what-kinds-of-heuristics-are-mainly-used
+    
+    far_fruit = 0 #ditance between the current 2 farthest friuts from each other
+    pac_fruit = 0 #diatance between pacman and the closer of the 2 farthest fruits
+    
+    #find the distance between currently farthest fruit from each other (stored in decreasing order in HeuristicInfo)
+    fruit = foodGrid.asList();
+    distance = 0
+    for food in fruit:
+        for more_food in fruit:
+            distance  = mazeDistance(food, more_food, problem.startingGameState)
+            if (distance > far_fruit):
+                far_fruit = distance
+                fruit_1 = food
+                fruit_2 = more_food
+    
+    #find the distance between pacman and the closer of the 2 fruits
+    try:
+        pac_fruit = min(mazeDistance(position, fruit_1, problem.startingGameState), mazeDistance(position, fruit_2, problem.startingGameState))
+    except:
+        pac_fruit = 0
+    #return the sum of the 2 distances
+    return far_fruit + pac_fruit
+    
+    return 0
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"

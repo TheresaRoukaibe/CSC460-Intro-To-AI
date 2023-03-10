@@ -511,7 +511,6 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
-    distances = [0]
     "*** YOUR CODE HERE ***"
     #algorithm based on an answer by Antonio Jurić on StackOverflow https://stackoverflow.com/questions/9994913/pacman-what-kinds-of-heuristics-are-mainly-used
     

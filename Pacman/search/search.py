@@ -102,7 +102,6 @@ def depthFirstSearch(problem: SearchProblem):
         #if the state popped is a goal state, stop the algorithm and return the complete list of actions reached
         if problem.isGoalState(currState):
             actions = action
-            print(actions)
             return actions
         #if not goal state:
         #this condition ensures a graph search version (avoids visiting already discovered nodes)

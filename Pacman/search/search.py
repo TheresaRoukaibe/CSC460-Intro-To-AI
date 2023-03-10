@@ -89,27 +89,29 @@ def depthFirstSearch(problem: SearchProblem):
     """
     "*** YOUR CODE HERE ***"
     #Initialize a stack (LIFO) as a frontier with initial state as first element
-    actions = []
+    #This choice was made because DFS expands the deepest nodes first and thus the last ones we added to the stack 
+    actions = [] #keeps track of pacman actions to do
     frontier = util.Stack()
-    visited = []
+    visited = [] 
     frontier.push((problem.getStartState(), []))
     
-    #while frontier not empty pop the last element added (deepest) we don't care about the stepCost in this algorithm 
+    #while frontier not empty pop the last element added (deepest) N.B. we don't care about the stepCost in this algorithm so only 
+    #state and action are stored in a variable 
     while not frontier.isEmpty():
         currState, action = frontier.pop()
         #if the state popped is a goal state, stop the algorithm and return the complete list of actions reached
         if problem.isGoalState(currState):
             actions = action
-            print(actions)
             return actions
+        #if not goal state:
         #this condition ensures a graph search version (avoids visiting already discovered nodes)
         if currState not in visited:
             visited.append(currState)
             #get Successors returns a list of successor, action, cost 
             for nextState in problem.getSuccessors(currState):
-                newAction = action + [nextState[1]]
-                nextNode = (nextState[0], newAction)
-                frontier.push(nextNode)
+                newAction = action + [nextState[1]] #adding the new action to our list of actions
+                nextNode = (nextState[0], newAction) #setting pacman state as successor state 
+                frontier.push(nextNode) 
     return actions
     util.raiseNotDefined()
 
@@ -119,7 +121,8 @@ def breadthFirstSearch(problem: SearchProblem):
      #Initialize a queue(FIFO) as a frontier with initial state as first element (simulating discovering branches level by level)
      #The logic behnid this is the same as DFS but the it is the data structure that changes 
     actions = []
-    frontier = util.Queue()
+    frontier = util.Queue() #Queue is used in order to make sure that the nodes are expanded level by level 
+    #meaning we get the successor of the first nodes added first 
     visited = []
     frontier.push((problem.getStartState(), []))
 
@@ -140,13 +143,17 @@ def breadthFirstSearch(problem: SearchProblem):
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+      #The logic behnid this is the same as DFS and BFS
     actions = []
+    # a priority queue was used here because we need to keep track of the cost (due to the fact that this algorithm chooses the lowest cost)
     frontier = util.PriorityQueue()
     visited = []
     cost = 0;
+    #pushing pacman's start state with a cost of 0
     frontier.push((problem.getStartState(), [], cost), cost)
 
     while not frontier.isEmpty():
+        #cost is added because it is taken into consideration 
         currState, action, cost = frontier.pop()
         if problem.isGoalState(currState):
             actions = action
@@ -154,9 +161,11 @@ def uniformCostSearch(problem: SearchProblem):
         if currState not in visited:
             visited.append(currState)
             for nextState, nextAction, nextCost in problem.getSuccessors(currState):
+                #adding up the cost to go to next node 
                 newCost = cost + nextCost
                 newAction = action + [nextAction]
                 nextNode = ((nextState, newAction, newCost))
+                #updating our priority queue with the new successor 
                 frontier.update(nextNode, newCost)
     return actions
     util.raiseNotDefined()
@@ -171,7 +180,8 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    # heuristic is manhattanHeuristic already implemented 
+    #heuristic is manhattanHeuristic already implemented 
+    #the logic is the same as the UCS algorithm however heuristic becomes actual_cost + heuristic 
     actions = []
     frontier = util.PriorityQueue()
     visited = []
@@ -190,6 +200,7 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
                 newCost = cost + nextCost 
                 newAction = action + [nextAction]
                 nextNode = ((nextState, newAction, newCost))
+                #f(n) = g(n) + h(n) where g is the cost and h the heuristic 
                 newHeuristic = newCost + heuristic(nextState, problem)
                 frontier.update(nextNode, newHeuristic)
     return actions

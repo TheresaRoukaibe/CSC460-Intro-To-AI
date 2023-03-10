@@ -303,7 +303,7 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        #The only needed state space is pacman's starting position and the corners visited  
+        #The only needed state space is pacman's starting position and the corners visited  as stated in the problem
         return (self.startingPosition,self.cornersReached)
         util.raiseNotDefined()
 
@@ -312,7 +312,7 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        #A goal state is one where all corners are reached hence all indexes should have a value TRUE
+        #A goal state is one where all corners are reached hence all indexes should have a value TRUE in cornersReached list
         for position in state[1]:
             if not position:
                 return False
@@ -355,7 +355,7 @@ class CornersProblem(search.SearchProblem):
                     cornerVisited[self.corners.index((nextx,nexty))] = True
 
                 nextState = ((nextx, nexty),cornerVisited)
-                #adding successor with a cost of 1 
+                #adding successor with a cost of 1 as demanded in the problem 
                 successors.append((nextState,action,1))
 
 
@@ -399,20 +399,24 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     cornersVisited = state[1]
     unvisitedCorners = []
     heuristic = 0
-    #add the false corners(not visited) to this array  from the corners coordinates
+    #Here I am copying the values in cornersReached that are false (not visited) into a new array where i store the actual coordinates
     for index, value in enumerate(cornersVisited):
         if not value:
             unvisitedCorners.append(myCorners[index])
     currentPosition = state[0]
 
     while unvisitedCorners:
+        #if all corners are visited (goal) return 0 
         if not unvisitedCorners:
             return 0
         distances = []
+        #As the example in class, heuristic in class is taken as the minimum manhattan distance to any corner in the unvisited list 
+        #when this corner is visited we remove it from the list 
         for corner in unvisitedCorners:
             distances.append((util.manhattanDistance(currentPosition, corner), corner))
         newDistance, newCorner = min(distances)
         heuristic += newDistance
+        #assign pacman position to nearest corner 
         currentPosition = newCorner
         unvisitedCorners.remove(newCorner)
 
@@ -566,6 +570,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
+        #solving problem with appropriate search function implemented before in search.py
         return search.astar(problem)
         util.raiseNotDefined()
 
@@ -603,7 +608,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        #return wether pacman's position is one where food exists 
+        #return wether pacman's position is one where food exists which is a goal state in this problem
         return self.food[x][y]
         util.raiseNotDefined()
 

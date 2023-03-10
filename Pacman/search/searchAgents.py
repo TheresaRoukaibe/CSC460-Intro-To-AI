@@ -513,10 +513,10 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     position, foodGrid = state
     distances = [0]
     "*** YOUR CODE HERE ***"
-    #algorithm based on an aswer by Antonio Jurić on StackOverflow https://stackoverflow.com/questions/9994913/pacman-what-kinds-of-heuristics-are-mainly-used
+    #algorithm based on an answer by Antonio Jurić on StackOverflow https://stackoverflow.com/questions/9994913/pacman-what-kinds-of-heuristics-are-mainly-used
     
-    far_fruit = 0 #ditance between the current 2 farthest friuts from each other
-    pac_fruit = 0 #diatance between pacman and the closer of the 2 farthest fruits
+    far_fruit = 0 #distance between the current 2 farthest friuts from each other
+    pac_fruit = 0 #distance between pacman and the closer of the 2 farthest fruits
     
     #find the distance between currently farthest fruit from each other (stored in decreasing order in HeuristicInfo)
     fruit = foodGrid.asList();

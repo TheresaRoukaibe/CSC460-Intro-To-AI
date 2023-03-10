@@ -406,6 +406,8 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     currentPosition = state[0]
 
     while unvisitedCorners:
+        if not unvisitedCorners:
+            return 0
         distances = []
         for corner in unvisitedCorners:
             distances.append((util.manhattanDistance(currentPosition, corner), corner))
@@ -509,9 +511,9 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
+    distances = [0]
     "*** YOUR CODE HERE ***"
-
-    #algorithm based on an aswer by Antonio Jurić on StackOverflow https://stackoverflow.com/questions/9994913/pacman-what-kinds-of-heuristics-are-mainly-used
+    #algorithm based on an answer by Antonio Jurić on StackOverflow https://stackoverflow.com/questions/9994913/pacman-what-kinds-of-heuristics-are-mainly-used
     
     far_fruit = 0 #distance between the current 2 farthest friuts from each other
     pac_fruit = 0 #distance between pacman and the closer of the 2 farthest fruits
@@ -565,6 +567,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
+        return search.astar(problem)
         util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
@@ -601,6 +604,8 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
+        #return wether pacman's position is one where food exists 
+        return self.food[x][y]
         util.raiseNotDefined()
 
 def mazeDistance(point1: Tuple[int, int], point2: Tuple[int, int], gameState: pacman.GameState) -> int:
